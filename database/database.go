@@ -5,11 +5,9 @@ import (
 	"log"
 )
 
-// DB - database connection instance
-var DB *sql.DB
+var database *sql.DB
 
-// InitDatabase - initialize database connection
-func InitDatabase() {
+func init() {
 	db, err := sql.Open("sqlite3", "gorestarch.db")
 	if err != nil {
 		log.Fatalln(err)
@@ -20,17 +18,24 @@ func InitDatabase() {
 		log.Fatalln(err)
 	}
 
-	DB = db
+	database = db
 }
 
-// InitMigrations - create tables
-func InitMigrations() {
+// GetConnection - return database connection instance
+func GetConnection() *sql.DB {
+	return database
+}
+
+// DoMigrations - create tables
+func DoMigrations() {
+	var db = GetConnection()
+
 	createTableUser := `CREATE TABLE IF NOT EXISTS users (
 												id INTEGER PRIMARY KEY,
 												username TEXT NOT NULL,
 												password TEXT NOT NULL
 											);`
-	_, err := DB.Exec(createTableUser)
+	_, err := db.Exec(createTableUser)
 	if err != nil {
 		log.Fatalln(err)
 	}

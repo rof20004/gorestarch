@@ -9,6 +9,8 @@ import (
 
 // List - query all users
 func List() ([]User, error) {
+	var db = database.GetConnection()
+
 	var (
 		id       sql.NullInt64
 		username sql.NullString
@@ -16,7 +18,7 @@ func List() ([]User, error) {
 
 	query := "SELECT id, username FROM users"
 
-	rows, err := database.DB.Query(query)
+	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err
 	}
@@ -36,9 +38,11 @@ func List() ([]User, error) {
 
 // Insert - create user
 func Insert(user *User) error {
+	var db = database.GetConnection()
+
 	query := "INSERT INTO users(username, password) VALUES(?, ?)"
 
-	_, err := database.DB.Exec(query, user.Username, user.Password)
+	_, err := db.Exec(query, user.Username, user.Password)
 	if err != nil {
 		return err
 	}
@@ -48,9 +52,11 @@ func Insert(user *User) error {
 
 // Delete - remove user
 func Delete(id string) error {
+	var db = database.GetConnection()
+
 	query := "DELETE FROM users WHERE id = ?"
 
-	result, err := database.DB.Exec(query, id)
+	result, err := db.Exec(query, id)
 	if err != nil {
 		return err
 	}
