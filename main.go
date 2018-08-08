@@ -20,5 +20,5 @@ func main() {
 	database.DoMigrations()
 
 	// PROGRAM initialize
-	e.Logger.Fatal(e.Start(":8080"))
+	e.Logger.Fatal(e.Start(":8088"))
 }

@@ -31,12 +31,12 @@ func Authenticate(c echo.Context) error {
 
 	// Set claims
 	claims := token.Claims.(jwt.MapClaims)
-	// claims["name"] = "Jon Snow"
+	claims["iss"] = "MVugwcUkND3c3JJoDUG0BMh6LiJOtJbz"
 	// claims["admin"] = false
 	claims["exp"] = time.Now().Add(time.Hour * 1).Unix()
 
 	// Generate encoded token and send it as response.
-	t, err := token.SignedString([]byte("gorestarch"))
+	t, err := token.SignedString([]byte("h10sdJKYlI9f6jnJjR6wDmzRXm9l7sq3"))
 	if err != nil {
 		return err
 	}

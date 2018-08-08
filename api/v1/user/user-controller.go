@@ -21,12 +21,22 @@ func ListUsers(c echo.Context) error {
 	// 	return echo.ErrUnauthorized
 	// }
 
-	users, err := List()
+	users, err := FindAll()
 	if err != nil {
 		log.Println("[ListUsers]", err.Error())
 		return echo.NewHTTPError(http.StatusBadRequest, genericError)
 	}
 	return c.JSON(http.StatusOK, users)
+}
+
+// GetUser - get a user
+func GetUser(c echo.Context) error {
+	user, err := FindByID(c.Param("id"))
+	if err != nil {
+		log.Println("[GetUser]", err.Error())
+		return echo.NewHTTPError(http.StatusBadRequest, genericError)
+	}
+	return c.JSON(http.StatusOK, user)
 }
 
 // InsertUser - create a user
@@ -37,7 +47,7 @@ func InsertUser(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, genericError)
 	}
 
-	err := Insert(user)
+	err := Create(user)
 	if err != nil {
 		log.Println("[InsertUser]", err.Error())
 		return echo.NewHTTPError(http.StatusBadRequest, genericError)

@@ -3,12 +3,13 @@ package user
 import (
 	"database/sql"
 	"errors"
+	"strconv"
 
 	"github.com/rof20004/gorestarch/database"
 )
 
-// List - query all users
-func List() ([]User, error) {
+// FindAll - query all users
+func FindAll() ([]User, error) {
 	var db = database.GetConnection()
 
 	var (
@@ -36,8 +37,31 @@ func List() ([]User, error) {
 	return users, nil
 }
 
-// Insert - create user
-func Insert(user *User) error {
+// FindByID - query a user
+func FindByID(id string) (*User, error) {
+	var db = database.GetConnection()
+
+	var (
+		username sql.NullString
+	)
+
+	query := "SELECT username FROM users WHERE id = ?"
+
+	err := db.QueryRow(query, id).Scan(&username)
+	if err != nil {
+		return nil, err
+	}
+
+	i, _ := strconv.ParseInt(id, 0, 64)
+
+	return &User{
+		ID:       i,
+		Username: username.String,
+	}, nil
+}
+
+// Create - create user
+func Create(user *User) error {
 	var db = database.GetConnection()
 
 	query := "INSERT INTO users(username, password) VALUES(?, ?)"
